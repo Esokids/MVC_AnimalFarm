@@ -12,5 +12,10 @@ namespace AnimalFarm.MvcWebApp.Controllers
         {
             return View();
         }
+
+        public ActionResult About()
+        {
+            return View();
+        }
     }
 }
