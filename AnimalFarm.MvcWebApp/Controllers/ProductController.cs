@@ -103,7 +103,18 @@ namespace AnimalFarm.MvcWebApp.Controllers
 
         public ActionResult Edit(string id)
         {
-            return View();
+            var entity = _service.GetProduct(id);
+            if (entity == null)
+            {
+                FlashMessage.Warning($"Product Code {id} data not found.");
+                return View(new ProductViewModel());
+            }
+
+            // Found product from data storage
+            // Product ==> ProductViewModel
+            // ProduuctViewModel.CategoryNamee <====> Product.ProductCategory.CategoryName
+            var model = AutoMapper.Mapper.Map<ProductViewModel>(entity);
+            return View(model);
         }
 
         [HttpPost]
