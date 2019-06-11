@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.PageTitle = "Inquiry Product";
+    ViewBag.PageIcon = "fas fa-search";
+}
+<h5><i class="fas fa-search"></i>Search Condition</h5>
+<div class="card bg-light animated fadeIn mb-2">
+    <div class="card-body">
+        <div class="row form-group">
+            @Html.Label("", "Product Code", new { @class = "col-2 col-form-label text-right" })
+            <div class="col-4">
+                @(Html.Kendo().TextBox().Name("productCode").HtmlAttributes(new { @style = "width:100%" }))
+            </div>
+            @Html.Label("", "Product Name", new { @class = "col-2 col-form-label text-right" })
+            <div class="col-4">
+                @(Html.Kendo().TextBox().Name("productName").HtmlAttributes(new { @style = "width:100%" }))
+            </div>
+        </div>
+        <div class="row form-group">
+            @Html.Label("", "Category", new { @class = "col-2 col-form-label text-right" })
+            <div class="col-4">
+                @(Html.Kendo().DropDownList()
+                    .Name("categoryID")
+                    .DataSource(ds => ds.Read(r => r.Url("/api/productcategories/list"))
+                        .ServerFiltering(false)
+                    )
+                    .OptionLabel("- Select -")
+                    .DataTextField("CategoryName")
+                    .DataValueField("CategoryID")
+                    .HtmlAttributes(new { @style = "width:100%" }))
+            </div>
+            <div class="col-6">
+                @Html.Kendo().Button().Name("searchButton").Content("Search").HtmlAttributes(new { @class = "k-primary k-search" }).Events(ev => ev.Click("searchButtonClicked"))
+                @Html.Kendo().Button().Name("clearButton").Content("Reset").HtmlAttributes(new { @class = "k-dark k-clear" }).Events(ev => ev.Click("clearButtonClicked"))
+            </div>
+        </div>      
+    </div>
+</div>
+<div id="error-container" class="alert alert-danger" style="display:none"></div>
+<h5><i class="fas fa-bars"></i>Search Results</h5>
+<div class="animated fadeIn">
+    @(Html.Kendo().Grid<ProductViewModel>()
+        .Name("grid")
+        .AutoBind(false)
+        .Columns(c =>
+        {
+            c.Template(t => { }).ClientTemplate("#=renderActionButton(data)#")
+                .Width(100)
+                .HtmlAttributes(new { @class = "text-center" });
+            c.Bound(t => t.ProductCode)
+                .Width(100);
+            c.Bound(t => t.ProductName);
+            c.Bound(t => t.CategoryName)
+                .Width(120);
+            c.Bound(t => t.CreateDateTime)
+                .Width(160)
+                .Format("{0:d MMM yyyy HH:mm}")
+                .HtmlAttributes(new { @class = "text-center" });
+            c.Bound(t => t.UpdateDateTime)
+                .Width(160)
+                .Format("{0:d MMM yyyy HH:mm}")
+                .HtmlAttributes(new { @class = "text-center" });
+        })
+        .DataSource(ds => ds.Custom().Transport(t =>
+        {
+            t.Read(r => r.Action("ReadProduct", "Product").Data("getSearchCriteria")
+                .Type(HttpVerbs.Post).Cache(false));
+        }
+            )
+            .Schema(s =>
+            {
+                s.Data("Data");
+                s.Total("Total");
+                s.Errors("Errors");
+                s.Model(m =>
+                {
+                    m.Id(f => f.ProductCode);
+                });
+            })
+            .ServerFiltering(false)
+            .ServerPaging(false)
+            .ServerSorting(false)
+            .PageSize(20)
+            .Events(ev => ev.RequestEnd("gridDataSourceRequestEnd").Error("gridDataSourceError"))
+        )
+        //.Sortable()
+        .Pageable(p => p.PageSizes(true))
+        .HtmlAttributes(new { })
+    )
+</div>
+
+@section scripts{
+    <script type="text/javascript">var grid;
+        var uiState = new AppUIState();
+
+        $(document).ready(function () {
+            app.initPage();
+            uiState.register("search", [".k-button"]);
+            grid = $("#grid").data("kendoGrid");            
+        });
+
+        function getSearchCriteria() {
+            return {
+                criteria: {
+                    productCode: $("#productCode").val(),
+                    productName: $("#productName").val(),
+                    categoryID: $("#categoryID").data("kendoDropDownList").value()
+                }
+            }
+        }
+
+        function searchButtonClicked(e) {
+            e.preventDefault();
+            app.ui.dataSourceRead(grid.dataSource);
+            clearError();
+        }
+
+        function clearButtonClicked(e) {
+            e.preventDefault();
+            app.ui.clear(["#productCode", "#productName","#categoryID","#grid"]);
+            clearError();
+        }
+
+        function gridDataSourceRequestEnd(e) {
+            uiState.busy("search", false);
+            app.ui.handleDataSourceRequestEnd(e);
+        }
+
+        function gridDataSourceError(e) {
+            var h = app.ui.handleGridDataSourceError(e, grid);
+            if (h.handled) {
+                showError(h.message);
+            }
+        }
+
+        function showError(message) {
+            $("#error-container").html(message).show();
+        }
+
+        function clearError() {
+            $("#error-container").empty().hide();
+        }
+
+        function renderActionButton(data) {
+            return '<a href="@Url.Action("Detail","Product")/' + data.ProductCode +'" class="k-button k-primary"><i class="fas fa-search"></i></a>';
+        }
+        </script>
+}

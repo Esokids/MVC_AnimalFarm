@@ -1,0 +1,89 @@
+﻿@model ProductViewModel
+@using Vereyon.Web;
+@{
+    ViewBag.PageTitle = "Register New Product";
+    ViewBag.PageIcon = "fas fa-plus-circle";
+}
+
+@Html.RenderFlashMessages()
+<h5><i class="fa fa-plus-circle"></i>Product Information</h5>
+<div class="animated fadeIn card">
+    <div class="card-body">
+        @using (Html.BeginForm("Register", "Product", FormMethod.Post, new { @id = "create-form", @novalidate = "novalidate" }))
+        {
+            <div class="form-group row">
+                @Html.LabelRequiredHintFor(m => m.ProductCode, new { @class = "col-3 col-form-label text-right" })
+                <div class="col-4">
+                    @Html.Kendo().TextBoxFor(m => m.ProductCode).HtmlAttributes(new { @style = "width:100%", maxlength = 20, @data_field = Html.DisplayNameFor(m => m.ProductCode) })
+                </div>
+                <div class="col-4">
+                    @Html.KendoValidationMessageFor(m => m.ProductCode)
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelRequiredHintFor(m => m.ProductName, new { @class = "col-3 col-form-label text-right" })
+                <div class="col-4">
+                    @Html.Kendo().TextBoxFor(m => m.ProductName).HtmlAttributes(new { @style = "width:100%", maxlength = 50, @data_field = Html.DisplayNameFor(m => m.ProductName) })
+                </div>
+                <div class="col-4">
+                    @Html.KendoValidationMessageFor(m => m.ProductName)
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelRequiredHintFor(m => m.CategoryID, new { @class = "col-3 col-form-label text-right" })
+                <div class="col-4">
+                    @(Html.Kendo().DropDownListFor(m => m.CategoryID)
+                                .DataSource(ds => ds.Read(r => r.Url("/api/productcategories/list")))
+                                .DataTextField("CategoryName")
+                                .DataValueField("CategoryID")
+                                .OptionLabel("- Select -")
+                                .HtmlAttributes(new { @style = "width:100%", @data_field = Html.DisplayNameFor(m => m.CategoryID) })
+                    )
+                </div>
+                <div class="col-4">
+                    @Html.KendoValidationMessageFor(m => m.CategoryID)
+                </div>
+            </div>            
+            <div class="form-group row">
+                <div class="offset-3 col-9">
+                    @Html.Kendo().Button().Name("createButton").Content("Register").HtmlAttributes(new { @class="k-primary", @type="submit" })
+                    @Html.Kendo().Button().Name("resetButton").Content("Reset").HtmlAttributes(new { @class = "k-warning" }).Events(e => e.Click("resetButtonClicked"))
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-3 col-7">
+                    <div class="k-validation-summary alert alert-danger" style="display:none"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section scripts {
+<script type="text/javascript">
+    var uiState = new AppUIState();
+    var validator;
+
+    $(document).ready(function () {
+        app.initPage();
+        uiState.register("submit", [".k-button"]);
+        validator = $("form").kendoValidator({
+            validate: function () {
+                app.ui.showValidateSummary(this.errors());
+            }
+        }).data("kendoValidator");
+    });
+
+    function resetButtonClicked(e) {
+        e.preventDefault();
+        app.ui.clear(["#ProductCode", "#ProductName", "#CategoryID"]);
+        setTimeout(function () {
+            app.ui.hideVaidationMessages(validator);
+        }, 100);
+
+    }
+
+</script>
+    
+    }

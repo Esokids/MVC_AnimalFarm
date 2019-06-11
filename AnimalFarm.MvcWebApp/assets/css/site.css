@@ -1,0 +1,258 @@
+﻿/*#62adea*/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 36px;
+    background-color: #fff;
+    color: #000;
+    -webkit-font-smoothing: always;
+}
+
+label {
+    font-weight: normal;
+}
+
+a, a:active, a:visited {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+    a:hover, a:focus {
+        color: #0067a9;
+        text-decoration: none;
+    }
+
+h1, h2, h3, h4, h5, h6 {
+    color: #000;
+    font-weight: 600;
+    margin: 0.25rem 0;
+}
+
+h1 {
+    font-size: 2.0rem;
+    line-height: normal;
+}
+
+h2 {
+    font-size: 1.75em;
+    line-height: normal;
+}
+
+h3 {
+    font-size: 1.5rem;
+    line-height: normal;
+}
+
+h4 {
+    font-size: 1.25rem;
+    line-height: normal;
+}
+
+h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: normal;
+}
+
+h6 {
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: normal;
+}
+
+/*
+ * HR
+ */
+hr {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+    hr.dashed {
+        border-style: dashed;
+        border-top: 1px dashed #a7a2a2;
+    }
+
+
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+    width: 100%;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+
+.page-title {
+    color: #000;
+    background-color: #ebe6e6;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem;    
+}
+
+.page-content {
+    margin-top: 48px;
+}
+
+footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.button-container {
+    margin: 10px 0px;
+}
+
+a.nav-user,
+a.nav-user:link,
+a.nav-user:visited {
+    font-size: 1rem;
+    margin-right: 10px;
+    color: #fff !important;
+}
+
+    a.nav-user:hover {
+        color: #ffeb3b !important;
+    }
+
+.nav-top-link,
+.nav-top-link:link,
+.nav-top-link:active
+.nav-top-link:visited {
+    color: #fff !important;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem !important;
+}
+
+    .nav-top-link:hover {
+        color: #ffeb3b !important
+    }
+
+#scroll-up {
+    bottom: 10px;
+    right: 20px;
+    background: none;
+    color: #000;
+    line-height: 1;
+    opacity: 0.8;
+    font-size: 0.75rem;
+}
+
+    #scroll-up:hover {
+        color: #ffeb3b;
+        opacity: 1;
+    }
+
+.page-wrapper-xs {
+    height: 8px;
+}
+
+.page-wrapper-sm {
+    height: 16px;
+}
+
+.page-wrapper-md {
+    height: 24px;
+}
+
+.page-wrapper-xl {
+    height: 48px;
+}
+
+.page-wrapper-xxl {
+    height: 60px;
+}
+
+.label {
+}
+
+.label-md {
+    font-size: 1em;
+}
+
+.label-lg {
+    font-size: 1.2em;
+}
+
+.required-hint:after {
+    content: " *";
+    color: #f80e0e;
+}
+
+.app-name {
+    font-size: 1.25rem;
+}
+
+    .app-name:hover {
+        color: #ffeb3b;
+    }
+
+img.logo {
+    width: auto;
+    height: 32px;
+}
+
+textarea {
+    resize: none;
+    font-size: 0.75rem !important;
+}
+
+
+.text-break-word {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+/*Require hint style*/
+.required-hint:after {
+    content: " *";
+    color: red;
+}
+
+
+#copyright {
+    height: 36px;
+    font-size: 0.75rem;
+}
+
+.font-size-xs {
+    font-size: 0.5rem !important;
+}
+
+.font-size-sm {
+    font-size: 0.75rem!important;
+}
+
+.font-size-md {
+    font-size: 1rem !important;
+}
+
+.font-size-lg {
+    font-size: 1.25rem !important;
+}
+
+.font-size-xl {
+    font-size: 1.5rem !important;
+}
+
+.font-size-xxl {
+    font-size: 1.75rem !important;
+}

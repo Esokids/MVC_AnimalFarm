@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AnimalFarm.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerCode" />
+          </Key>
+          <Property Name="CustomerCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="500" />
+          <Property Name="RegisterDate" Type="date" Nullable="false" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderNo" />
+          </Key>
+          <Property Name="OrderNo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CustomerCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TargetDate" Type="date" Nullable="false" />
+          <Property Name="OrderStatus" Type="int" Nullable="false" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OrderNo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="OrderLineNo" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerCode" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNo" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductCategory">
+          <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="af_ProductView_GetBySearchCriteria" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductCode" Type="varchar" Mode="In" />
+          <Parameter Name="ProductName" Type="varchar" Mode="In" />
+          <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="AnimalFarmModelsStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductCategory" Association="Self.FK_Product_ProductCategory">
+            <End Role="ProductCategory" EntitySet="ProductCategory" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AnimalFarm.Core.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerCode" />
+          </Key>
+          <Property Name="CustomerCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderNo" />
+          </Key>
+          <Property Name="OrderNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CustomerCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TargetDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OrderStatus" Type="Int32" Nullable="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="OrderNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderLineNo" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductCode" />
+          </Key>
+          <Property Name="ProductCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ProductCategory" Relationship="Self.FK_Product_ProductCategory" FromRole="Product" ToRole="ProductCategory" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_ProductCategory" FromRole="ProductCategory" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerCode" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderNo" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductCategory">
+          <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AnimalFarmDbContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategory" />
+          <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductCategory" Association="Self.FK_Product_ProductCategory">
+            <End Role="ProductCategory" EntitySet="ProductCategories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <FunctionImport Name="GetProductViewsBySearchCriteria" ReturnType="Collection(AnimalFarm.Core.Models.ProductView)">
+            <Parameter Name="ProductCode" Mode="In" Type="String" />
+            <Parameter Name="ProductName" Mode="In" Type="String" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="ProductView">
+          <Property Type="String" Name="ProductCode" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="ProductName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateDateTime" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="UpdateDateTime" Nullable="false" Precision="23" />
+          <Property Type="String" Name="CategoryName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AnimalFarmModelsStoreContainer" CdmEntityContainer="AnimalFarmDbContext">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="AnimalFarm.Core.Models.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="AnimalFarm.Core.Models.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="TargetDate" ColumnName="TargetDate" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="AnimalFarm.Core.Models.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="OrderLineNo" ColumnName="OrderLineNo" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="AnimalFarm.Core.Models.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCategories">
+            <EntityTypeMapping TypeName="AnimalFarm.Core.Models.ProductCategory">
+              <MappingFragment StoreEntitySet="ProductCategory">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetProductViewsBySearchCriteria" FunctionName="AnimalFarm.Models.Store.af_ProductView_GetBySearchCriteria">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AnimalFarm.Core.Models.ProductView">
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

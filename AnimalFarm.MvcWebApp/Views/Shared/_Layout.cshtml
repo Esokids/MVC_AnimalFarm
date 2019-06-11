@@ -1,0 +1,80 @@
+﻿@using AnimalFarm.Shared
+@{
+    var culture = System.Globalization.CultureInfo.GetCultureInfo(UICulture).TwoLetterISOLanguageName;
+    var appName = typeof(MvcApplication).Assembly.GetProduct();
+    var companyName = typeof(MvcApplication).Assembly.GetCompany();
+    var version = typeof(MvcApplication).Assembly.GetVersion();
+    var fileVersion = typeof(MvcApplication).Assembly.GetFileVersion();
+    var description = typeof(MvcApplication).Assembly.GetDescription();
+    var uiCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+
+    var pageTitle = ViewBag.PageTitle;
+    var pageIcon = ViewBag.PageIcon ?? "fas fa-cube";
+    var title = String.IsNullOrEmpty(pageTitle) ? string.Format("{0} | {1}", appName, companyName) : string.Format("{0} | {1} | {2}", pageTitle, appName, companyName);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="@description">
+    <title>@title</title>
+    @Styles.Render("~/assets/lib/font-awesome/css")
+    @Styles.Render("~/assets/lib/twitter-bootstrap")
+    @Styles.Render("~/assets/lib/kendo-ui/styles")
+    @Styles.Render("~/assets/app")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/kendo-ui")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary shadow-md">
+        <a class="navbar-brand" href="@Url.Action("Index","Home")">
+            <img src="~/assets/images/logo.png" title="Application Logo" class="logo" />
+            <span class="app-name">@appName</span>
+        </a>
+        <ul class="navbar-nav mr-auto ml-auto">
+            <li class="nav-item">
+                <a class="nav-link nav-top-link" href="@Url.Action("Register","Product")"><i class="fas fa-plus-circle"></i>Register New Product</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-top-link" href="@Url.Action("Inquiry","Product")"><i class="fas fa-search"></i>Inquiry Product</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="page-content">
+        @if (!String.IsNullOrEmpty(pageTitle))
+        {
+            <div class="box-shadow page-title">
+                <div class="container-fluid">
+                    <i class="@pageIcon"></i>@pageTitle
+                </div>
+            </div>
+        }
+        <div class="page-wrapper-xs"></div>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+        <div class="page-wrapper-xs"></div>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div id="copyright" class="row bg-primary text-white d-flex align-items-center">
+                <div class="col-md-8 col-sm-12">
+                    @Html.Copyright(typeof(MvcApplication))
+                </div>
+                <div class="col-md-4 col-sm-12 text-right">
+                    @Html.FileLastWriteTime(typeof(MvcApplication), "Latest Update: {0:d MMM yyyy HH:mm}", Culture)
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+    </footer>
+    <div id="notifications" style="display:none"></div>
+    <div id="ajax-notifications" style="display:none"></div>
+    @Scripts.Render("~/bundles/app")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

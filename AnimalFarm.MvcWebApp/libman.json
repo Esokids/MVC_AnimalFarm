@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "font-awesome@5.8.2",
+      "destination": "assets/lib/font-awesome/"
+    },
+    {
+      "library": "twitter-bootstrap@4.3.1",
+      "destination": "assets/lib/twitter-bootstrap/",
+      "files": [
+        "js/bootstrap.min.js",
+        "js/bootstrap.js",
+        "js/bootstrap.js.map",
+        "js/bootstrap.min.js.map",
+        "css/bootstrap.css",
+        "css/bootstrap.css.map",
+        "css/bootstrap.min.css",
+        "css/bootstrap.min.css.map"
+      ]
+    },
+    {
+      "library": "mouse0270-bootstrap-notify@3.1.7",
+      "destination": "assets/lib/bootstrap-notify/"
+    },
+    {
+      "library": "jquery-scrollTo@2.1.2",
+      "destination": "assets/lib/jquery-scrollTo/"
+    },
+    {
+      "library": "scrollup@2.4.1",
+      "destination": "assets/lib/scrollup/"
+    },
+    {
+      "library": "jquery-confirm@3.3.4",
+      "destination": "assets/lib/jquery-confirm/"
+    },
+    {
+      "library": "animateCSS@1.2.2",
+      "destination": "assets/lib/animateCSS/"
+    },
+    {
+      "library": "jquery@3.4.1",
+      "destination": "assets/lib/jquery/"
+    },
+    {
+      "library": "animate.css@3.7.2",
+      "destination": "assets/lib/animate.css/"
+    }
+  ]
+}
