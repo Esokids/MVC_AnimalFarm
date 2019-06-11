@@ -3,7 +3,6 @@
     ViewBag.PageTitle = "Edit Product";
     ViewBag.PageIcon = "fas fa-edit";
 }
-
 <h5><i class="fas fa-edit">Edit Product</i></h5>
 <div class="card bg-light">
     <div class="card-body">
@@ -12,12 +11,12 @@
             <div class="form-group row">
                 @Html.LabelFor(m => m.ProductCode, new { @class = "col-3 col-form-label text-right" })
                 <div class="col-9 form-control-plaintext">
-                    @Html.DisplayFor(m=>m.ProductCode)
-                    @Html.HiddenFor(m=>m.ProductCode)
+                    @Html.DisplayFor(m => m.ProductCode)
+                    @Html.HiddenFor(m => m.ProductCode)
                 </div>
             </div>
             <div class="form-group row">
-                @Html.LabelRequiredHintFor(m => m.ProductName, new { @class = "col-3 col-form-label text-right" })
+                @Html.LabelFor(m => m.ProductName, new { @class = "col-3 col-form-label text-right" })
                 <div class="col-4">
                     @Html.Kendo().TextBoxFor(m => m.ProductName).HtmlAttributes(new { @style = "width:100%", maxlength = 50, @data_field = Html.DisplayNameFor(m => m.ProductName) })
                 </div>
@@ -26,21 +25,29 @@
                 </div>
             </div>
             <div class="form-group row">
-                @Html.LabelRequiredHintFor(m => m.CategoryID, new { @class = "col-3 col-form-label text-right" })
+                @Html.LabelFor(m => m.CategoryID, new { @class = "col-3 col-form-label text-right" })
                 <div class="col-4">
                     @(Html.Kendo().DropDownListFor(m => m.CategoryID)
-                                        .DataSource(ds => ds.Read(r => r.Url("/api/productcategories/list")))
-                                        .DataTextField("CategoryName")
-                                        .DataValueField("CategoryID")
-                                        .OptionLabel("- Select -")
-                                        .HtmlAttributes(new { @style = "width:100%", @data_field = Html.DisplayNameFor(m => m.CategoryID) })
+                                                        .DataSource(ds => ds.Read(r => r.Url("/api/productcategories/list")))
+                                                        .DataTextField("CategoryName")
+                                                        .DataValueField("CategoryID")
+                                                        .OptionLabel("- Select -")
+                                                        .HtmlAttributes(new { @style = "width:100%", @data_field = Html.DisplayNameFor(m => m.CategoryID) })
                     )
                 </div>
                 <div class="col-4">
                     @Html.KendoValidationMessageFor(m => m.CategoryID)
                 </div>
             </div>
+            <div class="row">
+                <div class="offset-3 col-9">
+                    @(Html.Kendo().Button().Name("saveButton").Content("Save")
+                            .HtmlAttributes(new { @type = "submit", @class = "k-dark k-save" }))
+                    <a class="k-button k-warning"
+                       href="@Url.Action("Detail","Product", new { id = Model.ProductCode })">Cancel</a>
+
+                </div>
+            </div>
         }
     </div>
 </div>
-
