@@ -18,7 +18,8 @@ namespace AnimalFarm.MvcWebApp.Controllers
         [Route("~/api/productcategories/list")]
         public ActionResult ListCategory()
         {
-            throw new NotImplementedException();
+            var values = _service.GetAllProductCategories();
+            return JsonNet(values);
         }
     }
 }

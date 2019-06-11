@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AnimalFarm.Core.Data;
+﻿using AnimalFarm.Core.Data;
 using AnimalFarm.Core.Data.EntityFramework;
 using AnimalFarm.Core.Models;
 using AnimalFarm.Shared.Models;
+using System;
+using System.Collections.Generic;
 
 namespace AnimalFarm.Services
 {
@@ -22,7 +19,30 @@ namespace AnimalFarm.Services
 
         public DataObjectResult CreateProduct(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var u = CreateUnitOfWork())
+                {
+                    if (ValidateData(product))
+                    {
+                        u.Products.Add(product);
+                        u.SaveChanges();
+                        return DataObjectResult.Succeed();
+                    }
+                    return DataObjectResult.Fail(new Exception("Invalid data from business logic."));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return DataObjectResult.Fail(ex);
+            }
+
+        }
+
+        private bool ValidateData(Product entity)
+        {
+            return true;
         }
 
         public DataObjectResult EditProduct(Product product)
@@ -32,7 +52,10 @@ namespace AnimalFarm.Services
 
         public IList<ProductCategory> GetAllProductCategories()
         {
-            throw new NotImplementedException();
+            using (var u = CreateUnitOfWork())
+            {
+                return u.ProductCategories.GetAll();
+            }
         }
 
         public Product GetProduct(string productCode)
@@ -50,8 +73,8 @@ namespace AnimalFarm.Services
             throw new NotImplementedException();
         }
 
-       
-        
-        
+
+
+
     }
 }

@@ -49,7 +49,40 @@ namespace AnimalFarm.MvcWebApp.Controllers
         [HttpPost]
         public ActionResult Register(ProductViewModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                FlashMessage.Danger("Invalid product data.");
+                return View(model);
+            }
+            try
+            {
+                //ProductViewModel => Product
+                //var entity = new Product()
+                //{
+                //    ProductCode = model.ProductCode,
+                //    ProductName = model.ProductName,
+                //    CategoryID = model.CategoryID,
+                //    CreateDateTime = DateTime.Now,
+                //    UpdateDateTime = DateTime.Now
+                //};
+                var entity = AutoMapper.Mapper.Map<Product>(model);
+                entity.CreateDateTime = DateTime.Now;
+                entity.UpdateDateTime = DateTime.Now;
+                var result = _service.CreateProduct(entity);
+                if (result.IsSucceed)
+                {
+                    FlashMessage.Confirmation("Create product successfully.");
+                    return RedirectToAction("Register");
+                    //return View(new ProductViewModel());
+                }
+                FlashMessage.Danger("Create product error. Error:" + result.GetErrorMessage());
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                FlashMessage.Danger("Create product error" + ex);
+                return View(model);
+            }
         }
 
         public ActionResult Edit(string id)
