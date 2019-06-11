@@ -1,14 +1,13 @@
 ﻿using AnimalFarm.Core.Models;
 using AnimalFarm.MvcWebApp.Models;
 using AnimalFarm.Services;
+using AnimalFarm.Shared;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Vereyon.Web;
-using Kendo.Mvc.Extensions;
 
 namespace AnimalFarm.MvcWebApp.Controllers
 {
@@ -27,7 +26,7 @@ namespace AnimalFarm.MvcWebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult ReadProduct([DataSourceRequest]DataSourceRequest request,ProductSearchCriteria criteria)
+        public ActionResult ReadProduct([DataSourceRequest]DataSourceRequest request, ProductSearchCriteria criteria)
         {
             try
             {
@@ -38,7 +37,7 @@ namespace AnimalFarm.MvcWebApp.Controllers
             catch (Exception ex)
             {
                 return InternalServerError(ex);
-            }         
+            }
         }
 
         public ActionResult Register()
@@ -87,18 +86,27 @@ namespace AnimalFarm.MvcWebApp.Controllers
 
         public ActionResult Detail(string id)
         {
-            var entity = _service.GetProduct(id);
-            if (entity == null)
+            try
             {
-                FlashMessage.Warning($"Product Code {id} data not found.");
+                var entity = _service.GetProduct(id);
+                if (entity == null)
+                {
+                    FlashMessage.Warning($"Product Code {id} data not found.");
+                    return View(new ProductViewModel());
+                }
+
+                // Found product from data storage
+                // Product ==> ProductViewModel
+                // ProduuctViewModel.CategoryNamee <====> Product.ProductCategory.CategoryName
+                var model = AutoMapper.Mapper.Map<ProductViewModel>(entity);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                FlashMessage.Danger(ExceptionUtility.GetLastExceptionMessage(ex));
                 return View(new ProductViewModel());
             }
 
-            // Found product from data storage
-            // Product ==> ProductViewModel
-            // ProduuctViewModel.CategoryNamee <====> Product.ProductCategory.CategoryName
-            var model = AutoMapper.Mapper.Map<ProductViewModel>(entity);
-            return View(model);
         }
 
         public ActionResult Edit(string id)
@@ -120,7 +128,22 @@ namespace AnimalFarm.MvcWebApp.Controllers
         [HttpPost]
         public ActionResult Edit(ProductViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                FlashMessage.Danger("Invalid product data.");
+                return View(model);
+            }
+
+            var entiry = AutoMapper.Mapper.Map<Product>(model);
+            entiry.UpdateDateTime = DateTime.Now;
+            var result = _service.EditProduct(entiry);
+            if (result.IsSucceed)
+            {
+                FlashMessage.Confirmation("Edit prroduct is successfully.");
+                return RedirectToAction("Detail", new { id = model.ProductCode });
+            }
+            FlashMessage.Danger("Edit product fail Error: " + result.GetErrorMessage());
+            return View(model);
         }
     }
 }

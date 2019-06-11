@@ -47,7 +47,37 @@ namespace AnimalFarm.Services
 
         public DataObjectResult EditProduct(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var u = CreateUnitOfWork())
+                {
+                    if (ValidateDataForEdit(product))
+                    {
+                        var entityToEdit = u.Products.Get(product.ProductCode);
+                        if (entityToEdit == null)
+                        {
+                            return DataObjectResult.Fail(new Exception("Product data not found."));
+                        }
+                        entityToEdit.ProductName = product.ProductName;
+                        entityToEdit.CategoryID = product.CategoryID;
+                        entityToEdit.UpdateDateTime = product.UpdateDateTime;
+                        u.Products.Edit(entityToEdit);
+                        u.SaveChanges();
+                        return DataObjectResult.Succeed();
+                    }
+                    return DataObjectResult.Fail(new Exception("Invalid bussiness for edit"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return DataObjectResult.Fail(new Exception("Invalid bussiness for edit"));
+            }
+
+        }
+
+        private bool ValidateDataForEdit(Product entity)
+        {
+            return true;
         }
 
         public IList<ProductCategory> GetAllProductCategories()
@@ -63,8 +93,11 @@ namespace AnimalFarm.Services
             using (var u = CreateUnitOfWork())
             {
                 var entity = u.Products.Get(productCode);
-                // Load Product Category from Category ID
-                entity.ProductCategory = u.ProductCategories.Get(entity.CategoryID);
+                if (entity != null)
+                {
+                    // Load Product Category from Category ID
+                    entity.ProductCategory = u.ProductCategories.Get(entity.CategoryID);
+                }
                 return entity;
             }
         }
