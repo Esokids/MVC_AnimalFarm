@@ -1,5 +1,53 @@
-﻿@{
+﻿@model ProductViewModel
+@{
     ViewBag.PageTitle = "Product Detail";
     ViewBag.PageIcon = "fas fa-th-list";
 }
+<h5><i class="fas fa-info-circle">Product Information</i></h5>
+<div class="card bg-light">
+    <div class="cardd-body">
+        <ul class="list-unstyled">
+            <li><label class="font-weight-bold">Product Code:</label> @Model.ProductCode</li>
+            <li><label class="font-weight-bold">Product Name:</label> @Model.ProductName</li>
+            <li><label class="font-weight-bold">Category:</label> @Model.CategoryName</li>
+            <li><label class="font-weight-bold">Create Date:</label> @Model.CreateDateTime</li>
+            <li><label class="font-weight-bold">Update Date:</label> @Model.UpdateDateTime</li>
+        </ul>
+    </div>
+</div>
 
+<h5><i class="fas fa-info-circle">Product Information</i></h5>
+<div class="card bg-light">
+    <div class="cardd-body">
+        <div class="row">
+            <label class="col-form-label col-3">Product Code:</label>
+            <div class="col-3 form-control-plaintext">
+                @Model.ProductCode
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-form-label col-3">Product Name:</label>
+            <div class="col-3 form-control-plaintext">
+                @Model.ProductName
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-form-label col-3">Category:</label>
+            <div class="col-3 form-control-plaintext">
+                @Model.CategoryName
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-form-label col-3">Create Date:</label>
+            <div class="col-3 form-control-plaintext">
+                @Model.CreateDateTime
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-form-label col-3">Update Date:</label>
+            <div class="col-3 form-control-plaintext">
+                @Model.UpdateDateTime
+            </div>
+        </div>
+    </div>
+</div>

@@ -60,12 +60,21 @@ namespace AnimalFarm.Services
 
         public Product GetProduct(string productCode)
         {
-            throw new NotImplementedException();
+            using (var u = CreateUnitOfWork())
+            {
+                var entity = u.Products.Get(productCode);
+                // Load Product Category from Category ID
+                entity.ProductCategory = u.ProductCategories.Get(entity.CategoryID);
+                return entity;
+            }
         }
 
         public IList<ProductView> GetProductsBySearchCriteria(ProductSearchCriteria criteria)
         {
-            throw new NotImplementedException();
+            using (var u = CreateUnitOfWork())
+            {
+                return u.Products.GetBySearchCriteria(criteria);
+            }
         }
 
         public DataObjectResult RemoveProduct(Product product)

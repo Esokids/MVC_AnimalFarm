@@ -15,7 +15,10 @@ namespace AnimalFarm.MvcWebApp
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<ProductView, ProductViewModel>();
-                cfg.CreateMap<Product, ProductViewModel>();
+                cfg.CreateMap<Product, ProductViewModel>()
+                    .ForMember(t => t.CategoryName, 
+                    s => s.MapFrom(t => t.ProductCategory.CategoryName));
+                
                 cfg.CreateMap<ProductViewModel, Product>();
             });
         }
