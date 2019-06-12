@@ -145,5 +145,27 @@ namespace AnimalFarm.MvcWebApp.Controllers
             FlashMessage.Danger("Edit product fail Error: " + result.GetErrorMessage());
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult Delete(string id)
+        {
+            var entity = _service.GetProduct(id);
+            if(entity != null)
+            {
+                var result = _service.RemoveProduct(entity);
+                if (result.IsSucceed)
+                {
+                    return Ok("Delete product is successfully.");
+                }
+                return InternalServerError(result.Error);
+            }
+            return InternalServerError(new Exception("Product data not found."));
+        }
+
+        public ActionResult DeleteSuccess()
+        {
+            ViewBag.Message = "Delete product is successfully.";
+            return View("_Message");
+        }
     }
 }

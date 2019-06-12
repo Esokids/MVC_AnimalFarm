@@ -342,6 +342,7 @@
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\Register.cshtml" />
     <Content Include="Views\Product\Detail.cshtml" />
+    <Content Include="Views\Shared\_Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnimalFarm.Core\AnimalFarm.Core.csproj">

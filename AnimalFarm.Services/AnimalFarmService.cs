@@ -112,11 +112,24 @@ namespace AnimalFarm.Services
 
         public DataObjectResult RemoveProduct(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var u = CreateUnitOfWork())
+                {
+                    var entityToRemove = u.Products.Get(product.ProductCode);
+                    if (entityToRemove == null)
+                    {
+                        return DataObjectResult.Fail(new Exception("Product data not found"));
+                    }
+                    u.Products.Remove(entityToRemove);
+                    u.SaveChanges();
+                    return DataObjectResult.Succeed();
+                }
+            }
+            catch (Exception ex)
+            {
+                return DataObjectResult.Fail(ex);
+            }
         }
-
-
-
-
     }
 }

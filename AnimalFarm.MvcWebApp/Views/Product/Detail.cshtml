@@ -1,5 +1,5 @@
 ﻿@model ProductViewModel
-    @using Vereyon.Web;
+@using Vereyon.Web;
 @{
     ViewBag.PageTitle = "Product Detail";
     ViewBag.PageIcon = "fas fa-th-list";
@@ -7,75 +7,109 @@
 
 @section styles
     {
-        <style type="text/css">
-            .col-form-label{
+    <style type="text/css">
+        .col-form-label {
             font-size: 1rem;
-            }
-        </style>
-    }
+        }
+    </style>
+}
 @Html.RenderFlashMessages()
-<h5><i class="fas fa-info-circle">Product Information</i></h5>
-<div class="card bg-light">
-    <div class="cardd-body">
-        <ul class="list-unstyled">
-            <li><label class="font-weight-bold">Product Code:</label> @Model.ProductCode</li>
-            <li><label class="font-weight-bold">Product Name:</label> @Model.ProductName</li>
-            <li><label class="font-weight-bold">Category:</label> @Model.CategoryName</li>
-            <li><label class="font-weight-bold">Create Date:</label> @Model.CreateDateTime</li>
-            <li><label class="font-weight-bold">Update Date:</label> @Model.UpdateDateTime</li>
-        </ul>
-    </div>
-</div>
 
-<h5><i class="fas fa-info-circle">Product Information</i></h5>
-<div class="card bg-light">
-    <div class="cardd-body">
-        <div class="row">
-            <label class="col-form-label col-3">Product Code:</label>
-            <div class="col-3 form-control-plaintext">
-                @Model.ProductCode
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-form-label col-3">Product Name:</label>
-            <div class="col-3 form-control-plaintext">
-                @Model.ProductName
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-form-label col-3">Category:</label>
-            <div class="col-3 form-control-plaintext">
-                @Model.CategoryName
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-form-label col-3">Create Date:</label>
-            <div class="col-3 form-control-plaintext">
-                @Model.CreateDateTime
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-form-label col-3">Update Date:</label>
-            <div class="col-3 form-control-plaintext">
-                @Model.UpdateDateTime
-            </div>
+@if (Model == null || String.IsNullOrEmpty(Model.ProductCode))
+{
+    <div class="text-center">
+        @Html.ActionLink("Back to Inquiy page", "Inquiry", null, new { @class = "k-button k-primary" })
+    </div>
+}
+else
+{
+    <h5><i class="fas fa-info-circle">Product Information</i></h5>
+    <div class="card bg-light">
+        <div class="cardd-body">
+            <ul class="list-unstyled">
+                <li><label class="font-weight-bold">Product Code:</label> @Model.ProductCode</li>
+                <li><label class="font-weight-bold">Product Name:</label> @Model.ProductName</li>
+                <li><label class="font-weight-bold">Category:</label> @Model.CategoryName</li>
+                <li><label class="font-weight-bold">Create Date:</label> @Model.CreateDateTime</li>
+                <li><label class="font-weight-bold">Update Date:</label> @Model.UpdateDateTime</li>
+            </ul>
         </div>
     </div>
-    <div class="card-footer">
-        <div class="text-center">
-            <a href="@Url.Action("Edit","Product", new { id = Model.ProductCode })" class="k-button k-dark">Edit</a>
-                    @(Html.Kendo().Button().Name("deleteButton")
-                    .Content("Delete")
-                    .HtmlAttributes(new { @class = "k-button k-danger" })
-                    .Events(ev => ev.Click("deleteButtonClicked")))
-        </div>
-    </div>
-</div>
 
+    <h5><i class="fas fa-info-circle">Product Information</i></h5>
+    <div class="card bg-light">
+        <div class="cardd-body">
+            <div class="row">
+                <label class="col-form-label col-3">Product Code:</label>
+                <div class="col-3 form-control-plaintext">
+                    @Model.ProductCode
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-form-label col-3">Product Name:</label>
+                <div class="col-3 form-control-plaintext">
+                    @Model.ProductName
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-form-label col-3">Category:</label>
+                <div class="col-3 form-control-plaintext">
+                    @Model.CategoryName
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-form-label col-3">Create Date:</label>
+                <div class="col-3 form-control-plaintext">
+                    @Model.CreateDateTime
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-form-label col-3">Update Date:</label>
+                <div class="col-3 form-control-plaintext">
+                    @Model.UpdateDateTime
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="text-center">
+                <a href="@Url.Action("Edit","Product", new { id = Model.ProductCode })" class="k-button k-dark">Edit</a>
+                @(Html.Kendo().Button().Name("deleteButton")
+                                                                        .Content("Delete")
+                                                                        .HtmlAttributes(new { @class = "k-button k-danger" })
+                                                                        .Events(ev => ev.Click("deleteButtonClicked")))
+            </div>
+        </div>
+    </div>
+}
 @section scripts{
     <script type="text/javascript">
         function deleteButtonClicked(e) {
-        
-}
+            if (confirm("Are you sure you would like to delete?")) {
+                clearError();
+                $.ajax({
+                    url: "@Url.Action("Delete", "Product")",
+                    data: { id: '@Model.ProductCode' },
+                    method: 'POST',
+                    success: function (data, status, xhr) {
+                        app.ui.handleAjaxSuccess(data, status, xhr);
+                        window.location = "@Url.Action("DeleteSuccess", "Product")";
+                    },
+                    error: function (xhr, status, error) {
+                        var message = app.ui.handleAjaxError(xhr, status, error);
+                        showError(message);
+                    }
+                });
+            }
+        }
+
+        function clearError(){
+            $("#error-container").empty().hide();
+        }
+
+        function showError(message) {
+            $("#error-container").html(message).show();
+        }
+
+
     </script>
-    }
+}
